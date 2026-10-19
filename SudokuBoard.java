@@ -152,6 +152,39 @@ public class SudokuBoard
 
       return true;
    }
+   
+
+   public boolean isSolved()
+   {
+      if (!isValid())
+      {
+         return false;
+      }
+
+      Map<Integer, Integer> counts = new HashMap<>();
+      for (int r = 0; r < 9; r++)
+      {
+         for (int c = 0; c < 9; c++)
+         {
+            int val = board[r][c];
+            if (val == 0)
+            {
+               return false;
+            }
+            counts.put(val, counts.getOrDefault(val, 0) + 1);
+         }
+      }
+
+      for (int i = 1; i <= 9; i++)
+      {
+         if (counts.getOrDefault(i, 0) != 9)
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
 
 
 
