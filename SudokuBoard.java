@@ -78,6 +78,82 @@ public class SudokuBoard
       }
       return true;
    }
+   
+   
+
+   private int[][] getMiniSquare(int spot)
+   {
+      int[][] mini = new int[3][3];
+      int startRow = ((spot - 1) / 3) * 3;
+      int startCol = ((spot - 1) % 3) * 3;
+
+      for (int r = 0; r < 3; r++)
+      {
+         for (int c = 0; c < 3; c++)
+         {
+            mini[r][c] = board[startRow + r][startCol + c];
+         }
+      }
+      return mini;
+   }
+
+   private boolean isValidMiniSquare(int spot)
+   {
+      int[][] mini = getMiniSquare(spot);
+      Set<Integer> seen = new HashSet<>();
+
+      for (int r = 0; r < 3; r++)
+      {
+         for (int c = 0; c < 3; c++)
+         {
+            int val = mini[r][c];
+            if (val < 0 || val > 9)
+            {
+               return false;
+            }
+            if (val != 0)
+            {
+               if (!seen.add(val))
+               {
+                  return false;
+               }
+            }
+         }
+      }
+      return true;
+   }
+
+
+   public boolean isValid()
+   {
+      for (int r = 0; r < 9; r++)
+      {
+         if (!isValidRow(r))
+         {
+            return false;
+         }
+      }
+
+      for (int c = 0; c < 9; c++)
+      {
+         if (!isValidCol(c))
+         {
+            return false;
+         }
+      }
+
+      for (int box = 1; box <= 9; box++)
+      {
+         if (!isValidMiniSquare(box))
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+
 
    public String toString()
    {
