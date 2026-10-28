@@ -11,6 +11,7 @@ public class MySudokuBoard
       loadFile(fileName);
    }
 
+   
    private void loadFile(String fileName)
    {
       try
@@ -45,6 +46,8 @@ public class MySudokuBoard
       }
    }
 
+   //Validates a specific row on the board to ensure there are no duplicate numbers.
+   //Utilizes a HashSet to track seen values and checks that all entries are within the valid range.
    private boolean isValidRow(int r)
    {
       Set<Integer> seen = new HashSet<>();
@@ -129,6 +132,9 @@ public class MySudokuBoard
       return true;
    }
 
+   
+   //Checks the overall validity of the board by verifying every row, column, and 3x3 mini-square.
+   //Returns true only if all regions on the board satisfy the standard Sudoku rules.
    public boolean isValid()
    {
       for (int r = 0; r < 9; r++)
@@ -158,6 +164,8 @@ public class MySudokuBoard
       return true;
    }
 
+   //Determines if the Sudoku puzzle is completely and correctly solved.
+   //Ensures the board is valid, contains no empty spots, and has exactly 9 occurrences of digits 1 through 9.
    public boolean isSolved()
    {
       if (!isValid())
@@ -234,5 +242,40 @@ public class MySudokuBoard
          }
       }
       return result;
+   }
+   
+   
+   //Recursively attempts to solve the incomplete Sudoku board using backtracking.
+   //Tries values 1 through 9 in empty spots, validates the state, and backtracks when a dead end is reached.
+   public boolean solve() {
+      if (!isValid()) {
+         return false;
+      }
+      
+      if (isSolved()) {
+         return true;
+      }
+
+      for (int r = 0; r < 9; r++) {
+         for (int c = 0; c < 9; c++) {
+            if (board[r][c] == 0){
+               for (int val = 1; val <= 9; val++) {
+                  board[r][c] = val;
+                  
+                  if (isValid()) {
+                     if (solve()) {
+                        return true;
+                     }
+                  }
+                  
+                  board[r][c] = 0;
+               }
+               
+               return false;
+            }
+         }
+      }
+      
+      return false;
    }
 }
